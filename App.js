@@ -10,6 +10,7 @@
 import React from 'react';
 import AffilatedCompany from './pages/AffilatedCompany';
 import Webview from './pages/Webview';
+import Webview2 from './pages/Webview2';
 import { NavigationContainer, DefaultTheme  } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -30,6 +31,7 @@ const App: () => React$Node = () => {
       <Stack.Navigator screenOptions={{headerShown:false}} >
         <Stack.Screen name="AffilatedCompany" component={AffilatedCompany} />
         <Stack.Screen name="Webview" component={Webview} />
+        <Stack.Screen name="Webview2" component={Webview2} />
       </Stack.Navigator>
     </NavigationContainer>
     </>

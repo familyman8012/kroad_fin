@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Component } from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, ImageBackground, Animated, TouchableHighlight, Share, ActivityIndicator } from 'react-native'
-import { useIsFocused } from '@react-navigation/native';
+import { StyleSheet, Text, View, Image, Dimensions, ImageBackground, Animated, TouchableHighlight, Share } from 'react-native'
 import axios from 'axios';
 import { BlurView } from "@react-native-community/blur";
 import Swiper from 'react-native-swiper'
@@ -47,10 +46,6 @@ AffilatedCompanys = [
 
 function AffilatedCompany(props) {   
   const [AffilatedCompanys2, setAffilatedCompanys2] = useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [curIndex, setcurIndex] = useState(0);
-  const [startSwipe, setstartSwipe] = useState(false)
-   const isFocused = useIsFocused();
   const apiUrl = 'http://kip.company/kroad/kroaddata.json';
 
   
@@ -89,62 +84,50 @@ function AffilatedCompany(props) {
     }
   };
 
+
   useEffect(() => {
-      axios.get(apiUrl)
-          .then(response => {
-            console.log(response.data.AffilatedCompanys2);
-            setAffilatedCompanys2(response.data.AffilatedCompanys2);
-            setIsLoading(false);
-          })
-          .catch(error => {
-                alert(error.message);
-            })
-      
-  }, [])  
-  if (isFocused && !isLoading) {    
     anitest();
-    return (      
-      <Swiper
-        style={styles.wrapper}
-        loop={true}
-        onScrollBeginDrag={anitest}
-        paginationStyle={styles.dotWrap}
-        index={curIndex}
-        loadMinimalLoader={<ActivityIndicator color='black' size='large'  />}
-      >
-        {AffilatedCompanys2.map((item, index) => (       
-          <View key={item.companyName + index} style={styles.slide}> 
-              <Image source={{uri:item.imgUrl}} style={[styles.image]} />
-              <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
-                  <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               
-                  <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
-                  <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
-              </Animated.View>
-              {Platform.OS === 'android' ? (
-                <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : index+1})}}>
-                  <BtnInner />
-                </AnimatedTouchable> ) : (
-                <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : index+1})}}>
-                  <BtnInner />
-                </AnimatedTouchable>
-                )
-              }
-              <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {onShare(index)}}>
-                  <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
-                </AnimatedTouchable>
-            
-          </View>
-          ))}      
-        </Swiper>
-      )
-    } else {
-      return (
-         <View />
-      )
+    async function axiosRun() {
+      const result = await axios.get(apiUrl);
+      setAffilatedCompanys2(result.data.AffilatedCompanys2);
     }
+    axiosRun();    
+  }, [])
+  return (
+    <Swiper
+      style={styles.wrapper}
+      loop={true}
+      onScrollBeginDrag={anitest}
+      paginationStyle={styles.dotWrap}
+    >
+      {AffilatedCompanys.map((item, index) => (       
+        <View key={index} style={styles.slide}> 
+          <ImageBackground source={{uri:item.imgUrl}} style={styles.image}>
+            <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
+                <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               
+                <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
+                <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
+            </Animated.View>
+            {Platform.OS === 'android' ? (
+              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {  props.navigation.navigate('Webview', {webUriIndex : index+1})}}>
+                <BtnInner />
+              </AnimatedTouchable> ) : (
+              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {  props.navigation.navigate('Webview2', {webUriIndex : index+1})}}>
+                <BtnInner />
+              </AnimatedTouchable>
+              )
+            }
+            <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {onShare(index)}}>
+                <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
+              </AnimatedTouchable>
+          </ImageBackground>
+        </View>
+        ))}      
+      </Swiper>
+    )
 }
 
 function BtnInner() {

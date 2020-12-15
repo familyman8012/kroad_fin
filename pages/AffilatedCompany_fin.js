@@ -113,7 +113,7 @@ function AffilatedCompany(props) {
         loadMinimalLoader={<ActivityIndicator color='black' size='large'  />}
       >
         {AffilatedCompanys2.map((item, index) => (       
-          <View key={item.companyName + index} style={styles.slide}> 
+          <View key={item.companyName + index} style={[styles.slide, {position:'relative',zIndex:AffilatedCompanys2.length - index}]}> 
               <Image source={{uri:item.imgUrl}} style={[styles.image]} />
               <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
                   <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               

@@ -43,7 +43,16 @@ AffilatedCompanys = [
 
 
 // alert(AffilatedCompanys[0].companyName);
-
+function shuffleArray(array) {
+  let i = array.length - 1; 
+  for (i; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
 
 function AffilatedCompany(props) {   
   const [AffilatedCompanys2, setAffilatedCompanys2] = useState([]);
@@ -51,21 +60,21 @@ function AffilatedCompany(props) {
   const [curIndex, setcurIndex] = useState(0);
   const [startSwipe, setstartSwipe] = useState(false)
    const isFocused = useIsFocused();
-  const apiUrl = 'http://kip.company/kroad/kroaddata.json';
+  const apiUrl = `http://kip.company/kroad/kroaddata.json?_=${new Date().getTime()}`;
 
   
   const onShare = async (index) => {
     switch (index) {
-      case 0:
+      case 1:
         messageTxt = 'http://www.naver.com'
         break;
-      case 1:
+      case 2:
         messageTxt = 'http://play-block.com/'
         break;
-      case 2:
+      case 3:
         messageTxt = 'https://www.coupang.com/'
         break;
-      case 3:
+      case 4:
         messageTxt = 'https://www.youtube.com/'
         break;
       default:
@@ -93,7 +102,7 @@ function AffilatedCompany(props) {
       axios.get(apiUrl)
           .then(response => {
             console.log(response.data.AffilatedCompanys2);
-            setAffilatedCompanys2(response.data.AffilatedCompanys2);
+            setAffilatedCompanys2(shuffleArray(response.data.AffilatedCompanys2));
             setIsLoading(false);
           })
           .catch(error => {
@@ -103,49 +112,46 @@ function AffilatedCompany(props) {
   }, [])  
   if (isFocused && !isLoading) {    
     anitest();
-    return (      
-      <Swiper
-        style={styles.wrapper}
-        loop={true}
-        onScrollBeginDrag={anitest}
-        paginationStyle={styles.dotWrap}
-        index={curIndex}
-        loadMinimalLoader={<ActivityIndicator color='black' size='large'  />}
-      >
-        {AffilatedCompanys2.map((item, index) => (       
-          <View key={item.companyName + index} style={styles.slide}> 
-              <Image source={{uri:item.imgUrl}} style={[styles.image]} />
-              <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
-                  <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               
-                  <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
-                  <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
-              </Animated.View>
-              {Platform.OS === 'android' ? (
-                <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : index+1})}}>
-                  <BtnInner />
-                </AnimatedTouchable> ) : (
-                <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : index+1})}}>
-                  <BtnInner />
-                </AnimatedTouchable>
-                )
-              }
-              <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
-                                  onPress={() => {onShare(index)}}>
-                  <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
-                </AnimatedTouchable>
-            
-          </View>
-          ))}      
-        </Swiper>
-      )
-    } else {
-      return (
-         <View />
-      )
-    }
-}
+  }
+  return (      
+    <Swiper
+      style={isFocused && !isLoading ? styles.wrapper : styles.wrapper2}
+      loop={true}
+      onScrollBeginDrag={anitest}
+      paginationStyle={styles.dotWrap}
+      index={curIndex}
+      loadMinimalLoader={<ActivityIndicator color='black' size='large'  />}
+    >
+      {AffilatedCompanys2.map((item, index) => (       
+        <View key={item.companyName + index} style={styles.slide}> 
+            <Image source={{uri:item.imgUrl}} style={[styles.image]} />
+            <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
+                <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               
+                <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
+                <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
+            </Animated.View>
+            {Platform.OS === 'android' ? (
+              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : item.id})}}>
+                <BtnInner />
+              </AnimatedTouchable> ) : (
+              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : item.id})}}>
+                <BtnInner />
+              </AnimatedTouchable>
+              )
+            }
+            <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
+                                onPress={() => {onShare(item.id)}}>
+                <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
+              </AnimatedTouchable>
+          
+        </View>
+        ))}      
+      </Swiper>
+    )
+  }
+
 
 function BtnInner() {
   return(
@@ -160,6 +166,7 @@ function BtnInner() {
 const styles = StyleSheet.create({
   wrapper: {},
   slide: {flex: 1,justifyContent: 'center',backgroundColor: 'transparent'},
+  slide2: {position:'absolute',overflow:'hidden',top:'-10px',top:'-10px',width:'10px',height:'10px'},
   image: {flex: 1,resizeMode: "cover"},
   wrapLinkBox: {overflow: "hidden",position:'absolute', bottom: -195,left:0,width,height:195},
   blurView:{position: "absolute",top: 0,left: 0,bottom: 0,right: 0},

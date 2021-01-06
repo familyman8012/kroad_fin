@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableHighlight, Share, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableHighlight, Share, ActivityIndicator, StatusBar } from 'react-native'
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import { BlurView } from "@react-native-community/blur";
@@ -66,18 +66,21 @@ function AffilatedCompany(props) {
   const onShare = async (index) => {
     switch (index) {
       case 1:
-        messageTxt = 'http://www.gsrent.kr'
-        break;
-      case 2:
         messageTxt = 'http://dealerweb.kr/m/join_seller.php?c_code=c30225'
         break;
+      case 2:
+        messageTxt = 'http://www.kipersmall.co.kr'
+        break;
       case 3:
-        messageTxt = 'https://www.axa.com.hk/en'
+        messageTxt = 'http://www.gsrent.kr'
         break;
       case 4:
-        messageTxt = 'https://www.fwd.com.hk/tc/'
+        messageTxt = '#'
       case 5:
-        messageTxt = 'http://www.kipersmall.co.kr/'
+        messageTxt = 'https://www.axa.com.hk/en'
+        break;
+       case 6:
+        messageTxt = 'https://www.fwd.com.hk/tc'
         break;
       default:
         break;
@@ -104,7 +107,7 @@ function AffilatedCompany(props) {
       axios.get(apiUrl)
           .then(response => {
             console.log(response.data.AffilatedCompanys2);
-            setAffilatedCompanys2(shuffleArray(response.data.AffilatedCompanys2));
+            setAffilatedCompanys2(response.data.AffilatedCompanys2);
             setIsLoading(false);
           })
           .catch(error => {
@@ -116,8 +119,10 @@ function AffilatedCompany(props) {
   if (isFocused && !isLoading) {    
     anitest();
   }
-  if (!isLoading && startSwipe) {  
-  return (      
+  if (!isLoading) {  
+  return (
+    <>   
+    <StatusBar hidden />
     <Swiper
       style={isFocused && !isLoading ? styles.wrapper : styles.wrapper2}
       loop={true}
@@ -127,12 +132,16 @@ function AffilatedCompany(props) {
       loadMinimalLoader={<ActivityIndicator color='black' size='large' style={styles.flexContainer}   />}
     >
       {AffilatedCompanys2.map((item, index) => (       
-        <View key={item.companyName + index} style={styles.slide}> 
+        <View key={item.companyName + index} style={ styles.slide}> 
             <Image source={{uri:item.imgUrl}} style={[styles.image]} />
             <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
-                <BlurView style={styles.blurView} blurType="light" blurAmount={50} reducedTransparencyFallbackColor="white" />               
+              <View style={{borderRadius: 15,borderBottomRightRadius: 0,borderBottomLeftRadius:0,overflow: "hidden",  flex: 1,width: "100%",
+              backgroundColor: "transparent"}}>
+                <BlurView style={styles.blurView} blurType="light" blurAmount={50} reducedTransparencyFallbackColor="white" />
+                           
                 <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
-                <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
+                <Text numberOfLines={1} style={styles.description}>{item.description}</Text> 
+               </View>  
             </Animated.View>
             {Platform.OS === 'android' ? (
               <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
@@ -152,7 +161,7 @@ function AffilatedCompany(props) {
           
         </View>
         ))}      
-      </Swiper>
+      </Swiper></>   
     )}
     else {
       return (
@@ -175,9 +184,9 @@ function BtnInner() {
 
 const styles = StyleSheet.create({
   wrapper: {},
-  slide: {flex: 1,justifyContent: 'center',backgroundColor: 'transparent'},
-  slide2: {position:'absolute',overflow:'hidden',top:'-10px',top:'-10px',width:'10px',height:'10px'},
-  image: {flex: 1,resizeMode: "cover"},
+  slide: {flex: 1,justifyContent: 'center',backgroundColor: 'transparent'},   
+  wrapper2: {position:'absolute',overflow:'hidden',top:-10,left:-10,width:1,height:1},
+  image: {resizeMode: "cover",width:'100%',height:'100%'},
   wrapLinkBox: {overflow: "hidden",position:'absolute', bottom: -195,left:0,width,height:195},
   blurView:{position: "absolute",top: 0,left: 0,bottom: 0,right: 0},
   companyName : {marginTop:'8%',color: 'white',fontSize: 38,lineHeight:38,textAlign:'center'},

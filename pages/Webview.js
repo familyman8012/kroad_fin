@@ -9,7 +9,14 @@ export default function HomeScreen(props) {
   const [canGoBack, SetCanGoBack] = useState(false);
   const urlIndex = props.route.params.webUriIndex;
   const data = props.route.params.data;
-  const url = data[urlIndex].url
+  function isUrl(element)  {
+    if(element.id === urlIndex)  {
+      return true;
+    }
+  }
+  const urlData = data.find(isUrl);
+  const url = urlData.url;
+  console.log(url);
 
   useFocusEffect(
     React.useCallback(() => {

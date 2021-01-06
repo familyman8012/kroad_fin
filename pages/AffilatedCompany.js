@@ -61,11 +61,39 @@ function AffilatedCompany(props) {
   const [startSwipe, setstartSwipe] = useState(false)
    const isFocused = useIsFocused();
   const apiUrl = `http://kip.company/kroad/kroaddata.json?_=${new Date().getTime()}`;
+ 
+  useEffect(() => {
+    async function axiosRun() {
+      await axios.get(apiUrl)
+          .then(response => {
+            console.log(response.data.AffilatedCompanys2);
+            shuffleData = shuffleArray(response.data.AffilatedCompanys2);
+            setAffilatedCompanys2(shuffleData);
+            setIsLoading(false);
+          })
+          .catch(error => {
+                alert(error.message);
+            })
+  }
+      axiosRun()
+      setstartSwipe(true);
+      
+  }, [])  
+
   
-  const onShare = async (index) => {   
+  
+const onShare = async (index) => {   
+    function isUrl(element)  {
+        if(element.id === index)  {
+          return true;
+        }
+      }
+    const urlData = shuffleData.find(isUrl);
+    const urlShare = urlData.url;
+
     try {      
       const result = await Share.share({
-        message:AffilatedCompanys2[index].url,
+        message:urlShare,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -80,20 +108,8 @@ function AffilatedCompany(props) {
       alert(error.message);
     }
   };
+  
 
-  useEffect(() => {
-      axios.get(apiUrl)
-          .then(response => {
-            console.log(response.data.AffilatedCompanys2);
-            setAffilatedCompanys2(response.data.AffilatedCompanys2);
-            setIsLoading(false);
-          })
-          .catch(error => {
-                alert(error.message);
-            })
-      setstartSwipe(true);
-      
-  }, [])  
   if (isFocused && !isLoading) {    
     anitest();
   }

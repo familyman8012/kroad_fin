@@ -1,12 +1,12 @@
-import React, { useState, useEffect, Component } from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, ImageBackground, Animated, TouchableHighlight, Share, ActivityIndicator } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, Image, Dimensions, Animated, TouchableHighlight, Share, ActivityIndicator } from 'react-native'
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import { BlurView } from "@react-native-community/blur";
 import Swiper from 'react-native-swiper'
 
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const animation = new Animated.Value(0);
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableHighlight);
@@ -66,16 +66,18 @@ function AffilatedCompany(props) {
   const onShare = async (index) => {
     switch (index) {
       case 1:
-        messageTxt = 'http://www.naver.com'
+        messageTxt = 'http://www.gsrent.kr'
         break;
       case 2:
-        messageTxt = 'http://play-block.com/'
+        messageTxt = 'http://dealerweb.kr/m/join_seller.php?c_code=c30225'
         break;
       case 3:
-        messageTxt = 'https://www.coupang.com/'
+        messageTxt = 'https://www.axa.com.hk/en'
         break;
       case 4:
-        messageTxt = 'https://www.youtube.com/'
+        messageTxt = 'https://www.fwd.com.hk/tc/'
+      case 5:
+        messageTxt = 'http://www.kipersmall.co.kr/'
         break;
       default:
         break;
@@ -108,11 +110,13 @@ function AffilatedCompany(props) {
           .catch(error => {
                 alert(error.message);
             })
+      setstartSwipe(true);
       
   }, [])  
   if (isFocused && !isLoading) {    
     anitest();
   }
+  if (!isLoading && startSwipe) {  
   return (      
     <Swiper
       style={isFocused && !isLoading ? styles.wrapper : styles.wrapper2}
@@ -120,7 +124,7 @@ function AffilatedCompany(props) {
       onScrollBeginDrag={anitest}
       paginationStyle={styles.dotWrap}
       index={curIndex}
-      loadMinimalLoader={<ActivityIndicator color='black' size='large'  />}
+      loadMinimalLoader={<ActivityIndicator color='black' size='large' style={styles.flexContainer}   />}
     >
       {AffilatedCompanys2.map((item, index) => (       
         <View key={item.companyName + index} style={styles.slide}> 
@@ -149,8 +153,14 @@ function AffilatedCompany(props) {
         </View>
         ))}      
       </Swiper>
-    )
-  }
+    )}
+    else {
+      return (
+          <ActivityIndicator color='black' size='large' style={styles.flexContainer}  />
+      )
+    }
+  } 
+  
 
 
 function BtnInner() {
@@ -179,7 +189,8 @@ const styles = StyleSheet.create({
   btnImg : {position:'absolute',width:225,height:81,resizeMode: "contain"},
   btnShareImg : {width:48,height:48,resizeMode: "contain"},
   btnArrow : {position:'absolute',top: 32,right:50,width:8.5,height:17,resizeMode: "contain"},    
-  dotWrap : {position: 'absolute',bottom:201,right: 10}
+  dotWrap : {position: 'absolute',bottom:201,right: 10},
+  flexContainer : {flex:1,justifyContent:'center'}
 })
 
 export default AffilatedCompany;

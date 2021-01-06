@@ -61,33 +61,11 @@ function AffilatedCompany(props) {
   const [startSwipe, setstartSwipe] = useState(false)
    const isFocused = useIsFocused();
   const apiUrl = `http://kip.company/kroad/kroaddata.json?_=${new Date().getTime()}`;
-
   
-  const onShare = async (index) => {
-    switch (index) {
-      case 1:
-        messageTxt = 'http://dealerweb.kr/m/join_seller.php?c_code=c30225'
-        break;
-      case 2:
-        messageTxt = 'http://www.kipersmall.co.kr'
-        break;
-      case 3:
-        messageTxt = 'http://www.gsrent.kr'
-        break;
-      case 4:
-        messageTxt = '#'
-      case 5:
-        messageTxt = 'https://www.axa.com.hk/en'
-        break;
-       case 6:
-        messageTxt = 'https://www.fwd.com.hk/tc'
-        break;
-      default:
-        break;
-    }
-    try {
+  const onShare = async (index) => {   
+    try {      
       const result = await Share.share({
-        message:messageTxt,
+        message:AffilatedCompanys2[index].url,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -145,11 +123,11 @@ function AffilatedCompany(props) {
             </Animated.View>
             {Platform.OS === 'android' ? (
               <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : item.id})}}>
+                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : item.id, data:AffilatedCompanys2})}}>
                 <BtnInner />
               </AnimatedTouchable> ) : (
               <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : item.id})}}>
+                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : item.id, data:AffilatedCompanys2})}}>
                 <BtnInner />
               </AnimatedTouchable>
               )

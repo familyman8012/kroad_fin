@@ -8,31 +8,8 @@ export default function HomeScreen(props) {
   const webview = useRef(null);
   const [canGoBack, SetCanGoBack] = useState(false);
   const urlIndex = props.route.params.webUriIndex;
-
- switch (urlIndex) {
-      case 1:
-          var url = 'http://dealerweb.kr/m/join_seller.php?c_code=c30225'
-          break;
-      case 2:
-          var url = 'http://www.kipersmall.co.kr'
-          break;
-      case 3:
-          var url = 'http://www.gsrent.kr'
-          break;
-      case 4:
-          var url = '#'
-          break;
-      case 5:
-          var url = 'https://www.axa.com.hk/en'
-          break; 
-      case 6:
-          var url = 'https://www.fwd.com.hk/tc'
-          break;        
-      default:
-          break;
-  }
-
-  
+  const data = props.route.params.data;
+  const url = data[urlIndex].url
 
   useFocusEffect(
     React.useCallback(() => {

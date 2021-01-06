@@ -49,6 +49,7 @@ export default function HomeScreen(props) {
           renderLoading={() => (
             <ActivityIndicator color='black' size='large' style={styles.flexContainer} />
           )}
+          allowsBackForwardNavigationGestures={true}
           onNavigationStateChange={(navState) => {
             setCanGoBack(navState.canGoBack)
             setCanGoForward(navState.canGoForward)

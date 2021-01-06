@@ -130,7 +130,7 @@ function AffilatedCompany(props) {
         <View key={item.companyName + index} style={styles.slide}> 
             <Image source={{uri:item.imgUrl}} style={[styles.image]} />
             <Animated.View style={[styles.wrapLinkBox, {transform : [{translateY: animation}]}]}>
-                <BlurView style={styles.blurView} blurType="light" blurAmount={50} />               
+                <BlurView style={styles.blurView} blurType="light" blurAmount={50} reducedTransparencyFallbackColor="white" />               
                 <Text numberOfLines={1} style={styles.companyName}>{item.companyName}</Text>    
                 <Text numberOfLines={1} style={styles.description}>{item.description}</Text>  
             </Animated.View>

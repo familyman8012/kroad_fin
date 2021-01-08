@@ -28,16 +28,25 @@ export default function HomeScreen(props) {
   
   return (
     <>
-      <SafeAreaView style={styles.flexContainer}>
+      <SafeAreaView style={styles.flexContainer}>       
         <WebView
-          ref={webviewRef}
+          ref={webview}
           source={{uri: url}}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          sharedCookiesEnabled={true}
+          originWhitelist={["*"]}
+          scalesPageToFit={true}
+          mixedContentMode={"always"}
+          allowsInlineMediaPlayback={true}
+          allowsFullscreenVideo={true}
+          allowsBackForwardNavigationGestures={true}
+          allowsLinkPreview={false}          
           style={{width:'100%', height:'100%'}}
           startInLoadingState={true}
           renderLoading={() => (
             <ActivityIndicator color='black' size='large' style={styles.flexContainer} />
           )}
-          allowsBackForwardNavigationGestures={true}
           onNavigationStateChange={(navState) => {
             setCanGoBack(navState.canGoBack)
             setCanGoForward(navState.canGoForward)

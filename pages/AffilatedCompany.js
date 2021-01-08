@@ -34,14 +34,6 @@ const anitest = () => {
 }
 
 
-AffilatedCompanys = [
-    {companyName:"K-car", description:"Mercedes-Benz", imgUrl:"http://kip.company/kroad/1.png"},
-    {companyName:"Neunge", description:"Play-Block", imgUrl:"http://kip.company/kroad/2.jpg"},
-    {companyName:"Why Sone split from Garfield", description:"Mercedes-Benz3", imgUrl:"http://kip.company/kroad/3.jpg"},
-    {companyName:"Learnfrom Kim K to land that job", description:"Mercedes-Benz4", imgUrl:"http://kip.company/kroad/4.jpg"}
-  ]
-
-
 // alert(AffilatedCompanys[0].companyName);
 function shuffleArray(array) {
   let i = array.length - 1; 
@@ -151,7 +143,7 @@ const onShare = async (index) => {
             <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
                                 onPress={() => {onShare(item.id)}}>
                 <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
-              </AnimatedTouchable>
+            </AnimatedTouchable>
           
         </View>
         ))}      
@@ -187,11 +179,11 @@ const styles = StyleSheet.create({
   description :  {marginTop:5,color: 'white',fontSize: 16,textAlign:'center',},
   aniButtonWrap: {position:'absolute',bottom: -180,width:225,height:81,alignSelf: 'center',textAlign:'center'},
   btnShareImgnWrap: {position:'absolute',right:8,bottom: -55,width:48,height:48},
-  btnInner : {position:'relative',flex:1,justifyContent:'center'},
-  btnInnerText : {paddingRight:13, color: 'white', textAlign:'center', zIndex:3, fontSize:16},
+  btnInner : {position:'relative',flex:1,flexDirection:'row',width:225,height:81,alignItems:'center'},
+  btnInnerText : {paddingLeft:49, color: 'white', textAlign:'center', zIndex:3, fontSize:16},
   btnImg : {position:'absolute',width:225,height:81,resizeMode: "contain"},
   btnShareImg : {width:48,height:48,resizeMode: "contain"},
-  btnArrow : {position:'absolute',top: 32,right:50,width:8.5,height:17,resizeMode: "contain"},    
+  btnArrow : {width:8.5,height:17,marginLeft:19,resizeMode: "contain"},    
   dotWrap : {position: 'absolute',bottom:201,right: 10},
   flexContainer : {flex:1,justifyContent:'center'}
 })

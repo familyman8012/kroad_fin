@@ -107,8 +107,8 @@ const onShare = async (index) => {
   }
   if (!isLoading) {  
   return (
-    <>   
-    <StatusBar hidden />
+    <>
+    <StatusBar hidden />   
     <Swiper
       style={isFocused && !isLoading ? styles.wrapper : styles.wrapper2}
       loop={true}
@@ -129,22 +129,15 @@ const onShare = async (index) => {
                 <Text numberOfLines={1} style={styles.description}>{item.description}</Text> 
                </View>  
             </Animated.View>
-            {Platform.OS === 'android' ? (
-              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : item.id, data:AffilatedCompanys2})}}>
-                <BtnInner />
-              </AnimatedTouchable> ) : (
-              <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
-                                onPress={() => {setcurIndex(index);props.navigation.navigate('Webview2', {webUriIndex : item.id, data:AffilatedCompanys2})}}>
-                <BtnInner />
-              </AnimatedTouchable>
-              )
-            }
+            
+            <AnimatedTouchable underlayColor='none' style={[styles.aniButtonWrap, {transform : [{translateY: animation}]}]} 
+                              onPress={() => {setcurIndex(index);props.navigation.navigate('Webview', {webUriIndex : item.id, data:AffilatedCompanys2})}}>
+              <BtnInner />
+            </AnimatedTouchable>
             <AnimatedTouchable underlayColor='none' style={[styles.btnShareImgnWrap, {transform : [{translateY: animation}]}]} 
                                 onPress={() => {onShare(item.id)}}>
                 <Image source={require('../img/btnshare.png')} style={styles.btnShareImg} />
             </AnimatedTouchable>
-          
         </View>
         ))}      
       </Swiper></>   

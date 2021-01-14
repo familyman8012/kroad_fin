@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {StyleSheet, Share, Text, View,  ActivityIndicator, TouchableOpacity, ImageBackground} from 'react-native';
+import {SafeAreaView, StyleSheet, Share, Text, View,  ActivityIndicator, TouchableOpacity, ImageBackground} from 'react-native';
 import {BackHandler} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {useFocusEffect} from '@react-navigation/native';
@@ -60,7 +60,7 @@ export default function HomeScreen(props) {
   
   
   return (
-    <>  
+    <SafeAreaView style={{ flex: 1 }}>  
         <View style={styles.header}>
           <TouchableOpacity onPress={() => props.navigation.goBack()} style={styles.backbtn}>
             <ImageBackground source={require('../img/arrow_header_back.png')}  style={styles.image} />
@@ -93,7 +93,7 @@ export default function HomeScreen(props) {
             SetCanGoBack(navState.canGoBack);
           }}
         />
-    </>
+    </SafeAreaView>
   );
 }
 
